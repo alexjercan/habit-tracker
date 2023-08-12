@@ -2,7 +2,7 @@
 	import { Doc, Collection } from 'sveltefire';
 	import type { User } from 'firebase/auth';
 	import HabitsListElement from './HabitsListElement.svelte';
-	import { Firestore, doc, collection, setDoc, addDoc } from 'firebase/firestore';
+	import { Firestore, doc, collection, setDoc, addDoc, deleteDoc } from 'firebase/firestore';
 
 	export let user: User;
 	export let firestore: Firestore;
@@ -20,6 +20,10 @@
         await addDoc(collection(firestore, 'tracker', user.uid, 'habits'), { name: newHabit });
         newHabit = "";
     }
+
+    async function handleDelete(habit: any) {
+        await deleteDoc(doc(firestore, 'tracker', user.uid, 'habits', habit.id));
+    }
 </script>
 
 <Doc ref={`tracker/${user.uid}`} let:ref>
@@ -32,6 +36,7 @@
 					<HabitsListElement
 						value={habit.name}
 						handleKeyDown={(event, name) => handleKeyDown(event, { id: habit.id, name })}
+                        handleDelete={() => handleDelete(habit)}
 					/>
 				</li>
 			{/each}

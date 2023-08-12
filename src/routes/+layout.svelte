@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { FirebaseApp, SignedIn, SignedOut } from "sveltefire";
+	import { FirebaseApp, SignedOut } from "sveltefire";
 
 	import { auth, firestore } from "$lib/firebase";
 	import GoogleSignin from "$lib/components/GoogleSignin.svelte";
@@ -7,12 +7,10 @@
 </script>
 
 <FirebaseApp {auth} {firestore}>
-	<SignedIn>
-		<Navbar />
-		<main>
-			<slot />
-		</main>
-	</SignedIn>
+    <Navbar />
+    <main>
+        <slot />
+    </main>
 
 	<SignedOut>
 		<h1>Login</h1>

@@ -7,10 +7,10 @@
 </script>
 
 <FirebaseApp {auth} {firestore}>
-    <Navbar />
-    <main>
-        <slot />
-    </main>
+	<Navbar />
+	<main>
+		<slot />
+	</main>
 
 	<SignedOut>
 		<h1>Login</h1>

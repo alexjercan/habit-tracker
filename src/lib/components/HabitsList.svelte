@@ -26,27 +26,34 @@
 	}
 </script>
 
-<Doc ref={`tracker/${user.uid}`} let:ref>
-	<h2>Habits</h2>
+<div class="flex flex-col space-y-4">
+	<Doc ref={`tracker/${user.uid}`} let:ref>
+		<h2 class="text-2xl">Habits</h2>
 
-	<Collection ref={ref?.path + "/habits"} let:data={habits}>
-		<ul>
-			{#each habits as habit}
-				<li>
-					<HabitsListElement
-						value={habit.name}
-						handleKeyDown={(event, name) => handleKeyDown(event, { id: habit.id, name })}
-						handleDelete={() => handleDelete(habit)}
-					/>
-				</li>
-			{/each}
-		</ul>
-	</Collection>
-</Doc>
+		<Collection ref={ref?.path + "/habits"} let:data={habits}>
+			<ul class="list-none flex flex-col space-y-2">
+				{#each habits as habit}
+					<li>
+						<HabitsListElement
+							value={habit.name}
+							handleKeyDown={(event, name) => handleKeyDown(event, { id: habit.id, name })}
+							handleDelete={() => handleDelete(habit)}
+						/>
+					</li>
+				{/each}
+			</ul>
+		</Collection>
+	</Doc>
 
-<form on:submit|preventDefault={addNewHabit}>
-	<input type="text" bind:value={newHabit} placeholder="New Habit..." />
-</form>
+	<form on:submit|preventDefault={addNewHabit}>
+		<input
+			type="text"
+			bind:value={newHabit}
+			placeholder="New Habit..."
+			class="input input-ghost w-full max-w-xs"
+		/>
+	</form>
+</div>
 
 <style>
 </style>

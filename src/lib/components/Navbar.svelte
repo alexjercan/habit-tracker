@@ -1,13 +1,23 @@
 <script>
+	import { SignedIn } from "sveltefire";
 </script>
 
-<nav>
-	<a href="/">Home</a>
-	<a href="/account">Account</a>
-</nav>
+<div class="navbar bg-base-100">
+	<div class="flex-1">
+		<a href="/" class="btn btn-ghost normal-case text-xl">Habit Tracker</a>
+	</div>
+	<div class="flex-none gap-2">
+		<div>
+			<a href="/account" class="btn btn-ghost btn-circle avatar">
+				<div class="w-10 rounded-full">
+                    <SignedIn let:user>
+                        <img src={user.photoURL} alt="avatar" />
+                    </SignedIn>
+				</div>
+			</a>
+		</div>
+	</div>
+</div>
 
 <style>
-	nav {
-		@apply flex justify-between items-center;
-	}
 </style>

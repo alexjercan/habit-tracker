@@ -1,54 +1,92 @@
 <script lang="ts">
-	import { User, collectionStore } from "sveltefire";
-	import { collection, where, query, Firestore, DocumentReference } from "firebase/firestore";
+	import { User, collectionStore, Doc } from "sveltefire";
+	import { collection, Firestore, DocumentReference, doc, setDoc } from "firebase/firestore";
 
 	export let user: User;
 	export let firestore: Firestore;
-
-	const today = new Date();
-	const formattedMonth = (today.getMonth() + 1).toString().padStart(2, "0");
-	const month = `${today.getFullYear()}-${formattedMonth}`;
 
 	type Daily = {
 		id: string;
 		done: DocumentReference[];
 	};
 
-	const dailyRef = collection(firestore, "tracker", user.uid, "daily");
-	const q = query(dailyRef, where("month", "==", month));
-	const daily = collectionStore<Daily>(firestore, q);
-
 	type Habit = {
 		id: string;
 		name: string;
 	};
 
+	function generateDaysList() {
+		const currentDate = new Date();
+		const year = currentDate.getFullYear();
+		const month = currentDate.getMonth();
+		const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+		const daysList = [];
+		for (let day = 1; day <= daysInMonth; day++) {
+			const formattedDay = `${year}-${(month + 1).toString().padStart(2, "0")}-${day
+				.toString()
+				.padStart(2, "0")}`;
+			daysList.push(formattedDay);
+		}
+
+		return daysList;
+	}
+
+	function checkHabit(data: Daily | null, habit: Habit): boolean {
+		return data?.done?.map((h) => h.id)?.includes(habit.id) ?? false;
+	}
+
+	function completeHabit(day: string, data: Daily | null, habit: Habit) {
+		setDoc(doc(firestore, `tracker/${user.uid}/daily/${day}`), {
+			done: [...(data?.done ?? []), doc(firestore, `tracker/${user.uid}/habits/${habit.id}`)]
+		});
+	}
+
+	function uncompleteHabit(day: string, data: Daily | null, habit: Habit) {
+		setDoc(doc(firestore, `tracker/${user.uid}/daily/${day}`), {
+			done: data?.done?.filter((h) => h.id !== habit.id) ?? []
+		});
+	}
+
+	const daysList = generateDaysList();
+
 	const habitsRef = collection(firestore, "tracker", user.uid, "habits");
 	const habits = collectionStore<Habit>(firestore, habitsRef);
 </script>
 
-<h1>Tracker</h1>
-
-<div class="overflow-x-auto">
+<div class="w-full">
 	<table class="table">
 		<thead>
 			<tr>
 				<th />
 				{#each $habits as habit}
-					<th>{habit.name}</th>
+					<th class="text-xl">{habit.name}</th>
 				{/each}
 			</tr>
 		</thead>
 		<tbody>
-			{#each $daily as day}
+			{#each daysList as day}
 				<tr>
-					<th>{day.id}</th>
+					<th class="text-xl">{day}</th>
 					{#each $habits as habit}
-						{#if day.done.map((h) => h.id).includes(habit.id)}
-							<td>Done</td>
-						{:else}
-							<td />
-						{/if}
+						<Doc ref={`tracker/${user.uid}/daily/${day}`} let:data>
+							<td>
+								{#if checkHabit(data, habit)}
+									<input
+										type="checkbox"
+										checked
+										class="checkbox checkbox-success"
+										on:click={() => uncompleteHabit(day, data, habit)}
+									/>
+								{:else}
+                                    <input
+                                        type="checkbox"
+                                        class="checkbox checkbox-success"
+                                        on:click={() => completeHabit(day, data, habit)}
+                                    />
+                                {/if}
+							</td>
+						</Doc>
 					{/each}
 				</tr>
 			{/each}

@@ -4,7 +4,7 @@
 
 <div class="navbar bg-base-100">
 	<div class="flex-1">
-		<a href="/" class="btn btn-ghost normal-case text-xl">Habit Tracker</a>
+		<a href="/" class="btn btn-ghost normal-case text-5xl">Habit Tracker</a>
 	</div>
 	<div class="flex-none gap-2">
 		<div>

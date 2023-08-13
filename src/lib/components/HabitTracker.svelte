@@ -15,21 +15,24 @@
 		name: string;
 	};
 
+	function formatDate(date: Date) {
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, "0");
+		const day = String(date.getDate()).padStart(2, "0");
+		return `${year}-${month}-${day}`;
+	}
+
 	function generateDaysList() {
 		const currentDate = new Date();
-		const year = currentDate.getFullYear();
-		const month = currentDate.getMonth();
-		const daysInMonth = new Date(year, month + 1, 0).getDate();
+		const dateList = [];
 
-		const daysList = [];
-		for (let day = 1; day <= daysInMonth; day++) {
-			const formattedDay = `${year}-${(month + 1).toString().padStart(2, "0")}-${day
-				.toString()
-				.padStart(2, "0")}`;
-			daysList.push(formattedDay);
+		for (let i = -7; i <= 7; i++) {
+			const targetDate = new Date();
+			targetDate.setDate(currentDate.getDate() + i);
+			dateList.push(formatDate(targetDate));
 		}
 
-		return daysList;
+		return dateList;
 	}
 
 	function checkHabit(data: Daily | null, habit: Habit): boolean {
@@ -49,6 +52,7 @@
 	}
 
 	const daysList = generateDaysList();
+    const today = formatDate(new Date());
 
 	const habitsRef = collection(firestore, "tracker", user.uid, "habits");
 	const habits = collectionStore<Habit>(firestore, habitsRef);
@@ -67,6 +71,29 @@
 		<tbody>
 			{#each daysList as day}
 				<tr>
+                    {#if day === today}
+                    <th class="text-5xl">Today</th>
+					{#each $habits as habit}
+						<Doc ref={`tracker/${user.uid}/daily/${day}`} let:data>
+							<td>
+								{#if checkHabit(data, habit)}
+									<input
+										type="checkbox"
+										checked
+										class="checkbox checkbox-success checkbox-lg"
+										on:click={() => uncompleteHabit(day, data, habit)}
+									/>
+								{:else}
+									<input
+										type="checkbox"
+										class="checkbox checkbox-success checkbox-lg"
+										on:click={() => completeHabit(day, data, habit)}
+									/>
+								{/if}
+							</td>
+						</Doc>
+					{/each}
+                    {:else}
 					<th class="text-xl">{day}</th>
 					{#each $habits as habit}
 						<Doc ref={`tracker/${user.uid}/daily/${day}`} let:data>
@@ -79,15 +106,16 @@
 										on:click={() => uncompleteHabit(day, data, habit)}
 									/>
 								{:else}
-                                    <input
-                                        type="checkbox"
-                                        class="checkbox checkbox-success"
-                                        on:click={() => completeHabit(day, data, habit)}
-                                    />
-                                {/if}
+									<input
+										type="checkbox"
+										class="checkbox checkbox-success"
+										on:click={() => completeHabit(day, data, habit)}
+									/>
+								{/if}
 							</td>
 						</Doc>
 					{/each}
+                    {/if}
 				</tr>
 			{/each}
 		</tbody>

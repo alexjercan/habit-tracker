@@ -8,7 +8,7 @@
 	<input
 		type="text"
 		placeholder="Habit..."
-		class="input input-ghost w-full max-w-xs"
+		class="input input-ghost w-full max-w-xs text-xl"
 		bind:value
 		on:keydown={(event) => handleKeyDown(event, value)}
 	/>

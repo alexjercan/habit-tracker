@@ -28,7 +28,7 @@
 
 <div class="flex flex-col space-y-4">
 	<Doc ref={`tracker/${user.uid}`} let:ref>
-		<h2 class="text-2xl">Habits</h2>
+		<h2 class="text-5xl">Habits</h2>
 
 		<Collection ref={ref?.path + "/habits"} let:data={habits}>
 			<ul class="list-none flex flex-col space-y-2">
@@ -50,7 +50,7 @@
 			type="text"
 			bind:value={newHabit}
 			placeholder="New Habit..."
-			class="input input-ghost w-full max-w-xs"
+			class="input input-ghost w-full max-w-xs text-xl"
 		/>
 	</form>
 </div>

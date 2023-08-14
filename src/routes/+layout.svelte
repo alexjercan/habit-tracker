@@ -7,7 +7,7 @@
 	import Navbar from "$lib/components/Navbar.svelte";
 </script>
 
-<div class="flex flex-col h-screen">
+<div class="flex flex-col w-screen h-screen">
 	<FirebaseApp {auth} {firestore}>
 		<Navbar />
 		<main class="flex w-full h-full">

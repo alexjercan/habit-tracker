@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { User, collectionStore, Doc } from "sveltefire";
-	import { collection, Firestore, DocumentReference, doc, setDoc } from "firebase/firestore";
+	import { collection, Firestore, DocumentReference, doc, setDoc, query, orderBy } from "firebase/firestore";
 
 	export let user: User;
 	export let firestore: Firestore;
@@ -56,7 +56,8 @@
 	const today = formatDate(new Date());
 
 	const habitsRef = collection(firestore, "tracker", user.uid, "habits");
-	const habits = collectionStore<Habit>(firestore, habitsRef);
+    const habitsQuery = query(habitsRef, orderBy("createdAt"));
+	const habits = collectionStore<Habit>(firestore, habitsQuery);
 </script>
 
 <div class="w-full flex flex-col justify-around">

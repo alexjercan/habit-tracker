@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
+import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import {
 	getAuth,
@@ -16,12 +16,12 @@ const firebaseConfig = {
 	storageBucket: "habittacker.appspot.com",
 	messagingSenderId: "584678627298",
 	appId: "1:584678627298:web:859b4ce0c707a6075b8bbb",
-	measurementId: "G-D4KHZM016L",
+	measurementId: "G-D4KHZM016L"
 };
 
 const app = initializeApp(firebaseConfig);
 
-// export const analytics = getAnalytics(app);
+export const analytics = app.name && typeof window !== "undefined" ? getAnalytics(app) : null;
 export const firestore = getFirestore(app);
 export const auth = getAuth(app);
 

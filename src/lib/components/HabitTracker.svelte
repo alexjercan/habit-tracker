@@ -1,6 +1,14 @@
 <script lang="ts">
 	import { User, collectionStore, Doc } from "sveltefire";
-	import { collection, Firestore, DocumentReference, doc, setDoc, query, orderBy } from "firebase/firestore";
+	import {
+		collection,
+		Firestore,
+		DocumentReference,
+		doc,
+		setDoc,
+		query,
+		orderBy
+	} from "firebase/firestore";
 
 	export let user: User;
 	export let firestore: Firestore;
@@ -56,7 +64,7 @@
 	const today = formatDate(new Date());
 
 	const habitsRef = collection(firestore, "tracker", user.uid, "habits");
-    const habitsQuery = query(habitsRef, orderBy("createdAt"));
+	const habitsQuery = query(habitsRef, orderBy("createdAt"));
 	const habits = collectionStore<Habit>(firestore, habitsQuery);
 </script>
 
@@ -104,16 +112,9 @@
 					<div class="text-2xl text-center">{habit.name}</div>
 					<div class="">
 						{#if checkHabit(data, habit)}
-							<input
-								type="checkbox"
-								checked
-								class="checkbox checkbox-success checkbox-lg"
-							/>
+							<input type="checkbox" checked class="checkbox checkbox-success checkbox-lg" />
 						{:else}
-							<input
-								type="checkbox"
-								class="checkbox checkbox-success checkbox-lg"
-							/>
+							<input type="checkbox" class="checkbox checkbox-success checkbox-lg" />
 						{/if}
 					</div>
 				</button>

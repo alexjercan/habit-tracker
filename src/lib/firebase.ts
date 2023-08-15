@@ -1,9 +1,11 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, doc, getDoc, addDoc, collection, setDoc } from "firebase/firestore";
 import {
 	getAuth,
+	onAuthStateChanged,
 	signInWithPopup,
+	signInAnonymously,
 	GoogleAuthProvider,
 	type UserCredential,
 	signOut
@@ -25,8 +27,26 @@ export const analytics = app.name && typeof window !== "undefined" ? getAnalytic
 export const firestore = getFirestore(app);
 export const auth = getAuth(app);
 
+onAuthStateChanged(auth, async (user) => {
+	if (user) {
+		const userDoc = await getDoc(doc(firestore, "tracker", user.uid));
+		if (!userDoc.exists()) {
+			setDoc(doc(firestore, "tracker", user.uid), {});
+			addDoc(collection(firestore, "tracker", user.uid, "habits"), {
+				name: "Example Habit",
+				createdAt: new Date()
+			});
+		}
+	}
+});
+
 export async function signInWithGoogle() {
 	const credential = signInWithPopup(auth, new GoogleAuthProvider());
+	return loginHandler(credential);
+}
+
+export async function signInAsGuest() {
+	const credential = signInAnonymously(auth);
 	return loginHandler(credential);
 }
 

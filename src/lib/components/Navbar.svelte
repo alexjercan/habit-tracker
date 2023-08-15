@@ -11,7 +11,7 @@
 			<a href="/account" class="btn btn-ghost btn-circle avatar">
 				<div class="w-10 rounded-full">
 					<SignedIn let:user>
-						<img src={user.photoURL} alt="avatar" />
+						<img src={user.photoURL || "/avatar.png"} alt="avatar" />
 					</SignedIn>
 				</div>
 			</a>

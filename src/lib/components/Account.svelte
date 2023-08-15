@@ -12,7 +12,7 @@
 	<HabitsList {user} {firestore} />
 
 	<div class="flex flex-col justify-center">
-		<p>Logged in as {user.displayName}</p>
+		<p>Logged in as {user.displayName || "Guest"}</p>
 		<button on:click={firebaseSignOut} class="btn"> SignOut </button>
 	</div>
 </div>

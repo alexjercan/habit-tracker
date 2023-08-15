@@ -4,6 +4,7 @@
 
 	import { auth, firestore } from "$lib/firebase";
 	import GoogleSignin from "$lib/components/GoogleSignin.svelte";
+	import AnonymousSignin from "$lib/components/AnonymousSignin.svelte";
 	import Navbar from "$lib/components/Navbar.svelte";
 </script>
 
@@ -16,6 +17,7 @@
 				<SignedOut>
 					<h1 class="text-xl">Login</h1>
 					<GoogleSignin />
+					<AnonymousSignin />
 					<p class="footer">By signing up, you agree to the Terms of Service & Privacy Policy.</p>
 				</SignedOut>
 			</div>

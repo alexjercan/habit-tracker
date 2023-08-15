@@ -9,6 +9,8 @@
 		query,
 		orderBy
 	} from "firebase/firestore";
+	import Checkmark from "./Checkmark.svelte";
+	import Xmark from "./Xmark.svelte";
 
 	export let user: User;
 	export let firestore: Firestore;
@@ -72,34 +74,32 @@
 	{#each daysBefore as day, index}
 		<div
 			class="w-full flex flex-row justify-around"
-			style="filter: blur({daysBefore.length - index}px);"
+			style="filter: blur({daysBefore.length - index}px); font-size: {(index + 1) *
+				0.25}rem; padding-left: {daysBefore.length - index}rem; padding-right: {daysBefore.length -
+				index}rem; padding-top: {(index + 1) * 0.1}rem; padding-bottom: {(index + 1) * 0.1}rem;"
 		>
-			<div class="text-xl">{day}</div>
+			<div>{day}</div>
 			{#each $habits as habit}
 				<Doc ref={`tracker/${user.uid}/daily/${day}`} let:data>
-					<div class="cell">
+					<button
+						on:click={() =>
+							checkHabit(data, habit)
+								? uncompleteHabit(day, data, habit)
+								: completeHabit(day, data, habit)}
+					>
 						{#if checkHabit(data, habit)}
-							<input
-								type="checkbox"
-								checked
-								class="checkbox checkbox-success checkbox-md"
-								on:click={() => uncompleteHabit(day, data, habit)}
-							/>
+							<Checkmark />
 						{:else}
-							<input
-								type="checkbox"
-								class="checkbox checkbox-success checkbox-md"
-								on:click={() => completeHabit(day, data, habit)}
-							/>
+							<Xmark />
 						{/if}
-					</div>
+					</button>
 				</Doc>
 			{/each}
 		</div>
 	{/each}
 
-	<div class="w-full flex flex-row justify-around">
-		<div class="text-5xl flex justify-center items-center">Today</div>
+	<div class="w-full flex flex-row justify-around" style="font-size: 4rem;">
+		<div class="flex justify-center items-center">Today</div>
 		{#each $habits as habit}
 			<Doc ref={`tracker/${user.uid}/daily/${today}`} let:data>
 				<button
@@ -110,11 +110,11 @@
 							: completeHabit(today, data, habit)}
 				>
 					<div class="text-2xl text-center">{habit.name}</div>
-					<div class="">
+					<div>
 						{#if checkHabit(data, habit)}
-							<input type="checkbox" checked class="checkbox checkbox-success checkbox-lg" />
+							<Checkmark />
 						{:else}
-							<input type="checkbox" class="checkbox checkbox-success checkbox-lg" />
+							<Xmark />
 						{/if}
 					</div>
 				</button>
@@ -123,26 +123,28 @@
 	</div>
 
 	{#each daysAfter as day, index}
-		<div class="w-full flex flex-row justify-around" style="filter: blur({index + 1}px);">
-			<div class="text-xl">{day}</div>
+		<div
+			class="w-full flex flex-row justify-around"
+			style="filter: blur({index + 1}px); font-size: {(daysBefore.length - index) *
+				0.25}rem; padding-left: {index + 1}rem; padding-right: {index +
+				1}rem; padding-left: {index + 1}rem; padding-top: {(daysBefore.length - index) *
+				0.1}rem; padding-bottom: {(daysBefore.length - index) * 0.1}rem;"
+		>
+			<div>{day}</div>
 			{#each $habits as habit}
 				<Doc ref={`tracker/${user.uid}/daily/${day}`} let:data>
-					<div class="cell">
+					<button
+						on:click={() =>
+							checkHabit(data, habit)
+								? uncompleteHabit(day, data, habit)
+								: completeHabit(day, data, habit)}
+					>
 						{#if checkHabit(data, habit)}
-							<input
-								type="checkbox"
-								checked
-								class="checkbox checkbox-success checkbox-md"
-								on:click={() => uncompleteHabit(day, data, habit)}
-							/>
+							<Checkmark />
 						{:else}
-							<input
-								type="checkbox"
-								class="checkbox checkbox-success checkbox-md"
-								on:click={() => completeHabit(day, data, habit)}
-							/>
+							<Xmark />
 						{/if}
-					</div>
+					</button>
 				</Doc>
 			{/each}
 		</div>

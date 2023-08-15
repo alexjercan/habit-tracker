@@ -27,15 +27,20 @@ export const analytics = app.name && typeof window !== "undefined" ? getAnalytic
 export const firestore = getFirestore(app);
 export const auth = getAuth(app);
 
+const defaultTasks = ["🧼 Bathroom", "📕 Read", "💪 Gym", "🧘 Meditate"];
+
 onAuthStateChanged(auth, async (user) => {
 	if (user) {
 		const userDoc = await getDoc(doc(firestore, "tracker", user.uid));
 		if (!userDoc.exists()) {
 			setDoc(doc(firestore, "tracker", user.uid), {});
-			addDoc(collection(firestore, "tracker", user.uid, "habits"), {
-				name: "Example Habit",
-				createdAt: new Date()
-			});
+
+			for (const task of defaultTasks) {
+				addDoc(collection(firestore, "tracker", user.uid, "habits"), {
+					name: task,
+					createdAt: new Date()
+				});
+			}
 		}
 	}
 });

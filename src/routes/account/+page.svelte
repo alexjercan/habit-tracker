@@ -8,7 +8,7 @@
 	<title>Account</title>
 	<meta
 		name="description"
-        content="Page that allows user to manage their accounts. This page lets
+		content="Page that allows user to manage their accounts. This page lets
         users add, edit, and delete daily habits."
 	/>
 </svelte:head>

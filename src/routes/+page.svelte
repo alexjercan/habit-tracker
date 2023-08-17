@@ -8,7 +8,7 @@
 	<title>Habit Tracker</title>
 	<meta
 		name="description"
-        content="Dashboard that allows users to visualize and update the status
+		content="Dashboard that allows users to visualize and update the status
         of their daily habits."
 	/>
 </svelte:head>

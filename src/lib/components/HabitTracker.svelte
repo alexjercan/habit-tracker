@@ -70,9 +70,7 @@
 	const habits = collectionStore<Habit>(firestore, habitsQuery);
 </script>
 
-<div
-	class="w-full h-full flex flex-col justify-between items-center elcontainer"
->
+<div class="w-full h-full flex flex-col justify-between items-center elcontainer">
 	{#each daysBefore as day, index}
 		<div
 			class="w-full flex flex-row justify-between items-center element"
@@ -98,9 +96,7 @@
 		</div>
 	{/each}
 
-	<div
-		class="w-full flex flex-row justify-between current"
-	>
+	<div class="w-full flex flex-row justify-between current">
 		<div class="flex justify-center items-center">Today</div>
 		{#each $habits as habit}
 			<Doc ref={`tracker/${user.uid}/daily/${today}`} let:data>
@@ -151,53 +147,53 @@
 </div>
 
 <style lang="postcss">
-    .elcontainer {
-        padding-left: 3rem;
-        padding-right: 3rem;
-    }
+	.elcontainer {
+		padding-left: 3rem;
+		padding-right: 3rem;
+	}
 
-    .element {
-        font-size: calc(var(--i) * 0.25rem);
-        padding-top: calc(var(--i) * 0.1rem);
-        padding-bottom: calc(var(--i) * 0.1rem);
-        filter: blur(calc(var(--j) * 1px));
-        padding-left: calc(var(--j) * 1rem);
-        padding-right: calc(var(--j) * 1rem);
-    }
+	.element {
+		font-size: calc(var(--i) * 0.25rem);
+		padding-top: calc(var(--i) * 0.1rem);
+		padding-bottom: calc(var(--i) * 0.1rem);
+		filter: blur(calc(var(--j) * 1px));
+		padding-left: calc(var(--j) * 1rem);
+		padding-right: calc(var(--j) * 1rem);
+	}
 
-    .current {
+	.current {
 		font-size: 4rem;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-    }
+		padding-top: 1rem;
+		padding-bottom: 1rem;
+	}
 
-    .current_text {
-        font-size: 2rem;
-    }
+	.current_text {
+		font-size: 2rem;
+	}
 
-    @media (max-width: 768px) {
-        .elcontainer {
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
+	@media (max-width: 768px) {
+		.elcontainer {
+			padding-left: 1rem;
+			padding-right: 1rem;
+		}
 
-        .element {
-            font-size: calc(var(--i) * 0.1rem);
-            padding-top: 0;
-            padding-bottom: 0;
-            filter: blur(calc(var(--j) * 1px));
-            padding-left: calc(var(--j) * 1rem);
-            padding-right: calc(var(--j) * 1rem);
-        }
+		.element {
+			font-size: calc(var(--i) * 0.1rem);
+			padding-top: 0;
+			padding-bottom: 0;
+			filter: blur(calc(var(--j) * 1px));
+			padding-left: calc(var(--j) * 1rem);
+			padding-right: calc(var(--j) * 1rem);
+		}
 
-        .current {
-            font-size: 2rem;
-            padding-top: 1rem;
-            padding-bottom: 1rem;
-        }
+		.current {
+			font-size: 2rem;
+			padding-top: 1rem;
+			padding-bottom: 1rem;
+		}
 
-        .current_text {
-            font-size: 1rem;
-        }
-    }
+		.current_text {
+			font-size: 1rem;
+		}
+	}
 </style>

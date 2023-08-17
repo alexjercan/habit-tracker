@@ -11,9 +11,9 @@
 <div class="flex flex-col w-screen h-screen">
 	<FirebaseApp {auth} {firestore}>
 		<Navbar />
-		<main class="flex w-full h-full">
+		<main class="flex flex-col w-full h-full items-center justify-center">
 			<slot />
-			<div>
+			<div class="flex flex-col items-center justify-center">
 				<SignedOut>
 					<h1 class="text-xl">Login</h1>
 					<GoogleSignin />

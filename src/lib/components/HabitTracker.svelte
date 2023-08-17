@@ -70,13 +70,13 @@
 	const habits = collectionStore<Habit>(firestore, habitsQuery);
 </script>
 
-<div class="w-full flex flex-col justify-around">
+<div
+	class="w-full h-full flex flex-col justify-between items-center elcontainer"
+>
 	{#each daysBefore as day, index}
 		<div
-			class="w-full flex flex-row justify-around"
-			style="filter: blur({daysBefore.length - index}px); font-size: {(index + 1) *
-				0.25}rem; padding-left: {daysBefore.length - index}rem; padding-right: {daysBefore.length -
-				index}rem; padding-top: {(index + 1) * 0.1}rem; padding-bottom: {(index + 1) * 0.1}rem;"
+			class="w-full flex flex-row justify-between items-center element"
+			style="--i: {index + 1}; --j: {daysBefore.length - index}; "
 		>
 			<div>{day}</div>
 			{#each $habits as habit}
@@ -98,7 +98,9 @@
 		</div>
 	{/each}
 
-	<div class="w-full flex flex-row justify-around" style="font-size: 4rem;">
+	<div
+		class="w-full flex flex-row justify-between current"
+	>
 		<div class="flex justify-center items-center">Today</div>
 		{#each $habits as habit}
 			<Doc ref={`tracker/${user.uid}/daily/${today}`} let:data>
@@ -109,7 +111,7 @@
 							? uncompleteHabit(today, data, habit)
 							: completeHabit(today, data, habit)}
 				>
-					<div class="text-2xl text-center">{habit.name}</div>
+					<div class="text-center current_text">{habit.name}</div>
 					<div>
 						{#if checkHabit(data, habit)}
 							<Checkmark />
@@ -124,11 +126,8 @@
 
 	{#each daysAfter as day, index}
 		<div
-			class="w-full flex flex-row justify-around"
-			style="filter: blur({index + 1}px); font-size: {(daysBefore.length - index) *
-				0.25}rem; padding-left: {index + 1}rem; padding-right: {index +
-				1}rem; padding-left: {index + 1}rem; padding-top: {(daysBefore.length - index) *
-				0.1}rem; padding-bottom: {(daysBefore.length - index) * 0.1}rem;"
+			class="w-full flex flex-row justify-between items-center element"
+			style="--j: {index + 1}; --i: {daysBefore.length - index}; "
 		>
 			<div>{day}</div>
 			{#each $habits as habit}
@@ -150,3 +149,55 @@
 		</div>
 	{/each}
 </div>
+
+<style lang="postcss">
+    .elcontainer {
+        padding-left: 3rem;
+        padding-right: 3rem;
+    }
+
+    .element {
+        font-size: calc(var(--i) * 0.25rem);
+        padding-top: calc(var(--i) * 0.1rem);
+        padding-bottom: calc(var(--i) * 0.1rem);
+        filter: blur(calc(var(--j) * 1px));
+        padding-left: calc(var(--j) * 1rem);
+        padding-right: calc(var(--j) * 1rem);
+    }
+
+    .current {
+		font-size: 4rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .current_text {
+        font-size: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .elcontainer {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .element {
+            font-size: calc(var(--i) * 0.1rem);
+            padding-top: 0;
+            padding-bottom: 0;
+            filter: blur(calc(var(--j) * 1px));
+            padding-left: calc(var(--j) * 1rem);
+            padding-right: calc(var(--j) * 1rem);
+        }
+
+        .current {
+            font-size: 2rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .current_text {
+            font-size: 1rem;
+        }
+    }
+</style>

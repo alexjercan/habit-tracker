@@ -9,6 +9,7 @@
 		query,
 		orderBy
 	} from "firebase/firestore";
+	import { formatDate, generateDaysList } from "../date";
 	import Checkmark from "./Checkmark.svelte";
 	import Xmark from "./Xmark.svelte";
 
@@ -24,26 +25,6 @@
 		id: string;
 		name: string;
 	};
-
-	function formatDate(date: Date) {
-		const year = date.getFullYear();
-		const month = String(date.getMonth() + 1).padStart(2, "0");
-		const day = String(date.getDate()).padStart(2, "0");
-		return `${year}-${month}-${day}`;
-	}
-
-	function generateDaysList(start: number, end: number) {
-		const currentDate = new Date();
-		const dateList = [];
-
-		for (let i = start; i <= end; i++) {
-			const targetDate = new Date();
-			targetDate.setDate(currentDate.getDate() + i);
-			dateList.push(formatDate(targetDate));
-		}
-
-		return dateList;
-	}
 
 	function checkHabit(data: Daily | null, habit: Habit): boolean {
 		return data?.done?.map((h) => h.id)?.includes(habit.id) ?? false;
@@ -77,8 +58,8 @@
 			style="--i: {index + 1}; --j: {daysBefore.length - index}; "
 		>
 			<div>{day}</div>
-			{#each $habits as habit}
-				<Doc ref={`tracker/${user.uid}/daily/${day}`} let:data>
+			<Doc ref={`tracker/${user.uid}/daily/${day}`} let:data>
+				{#each $habits as habit}
 					<button
 						on:click={() =>
 							checkHabit(data, habit)
@@ -91,15 +72,15 @@
 							<Xmark />
 						{/if}
 					</button>
-				</Doc>
-			{/each}
+				{/each}
+			</Doc>
 		</div>
 	{/each}
 
 	<div class="w-full flex flex-row justify-between current">
 		<div class="flex justify-center items-center">Today</div>
-		{#each $habits as habit}
-			<Doc ref={`tracker/${user.uid}/daily/${today}`} let:data>
+		<Doc ref={`tracker/${user.uid}/daily/${today}`} let:data>
+			{#each $habits as habit}
 				<button
 					class="flex flex-col justify-between items-center grow-0 basis-0"
 					on:click={() =>
@@ -116,8 +97,8 @@
 						{/if}
 					</div>
 				</button>
-			</Doc>
-		{/each}
+			{/each}
+		</Doc>
 	</div>
 
 	{#each daysAfter as day, index}
@@ -126,8 +107,8 @@
 			style="--j: {index + 1}; --i: {daysBefore.length - index}; "
 		>
 			<div>{day}</div>
-			{#each $habits as habit}
-				<Doc ref={`tracker/${user.uid}/daily/${day}`} let:data>
+			<Doc ref={`tracker/${user.uid}/daily/${day}`} let:data>
+				{#each $habits as habit}
 					<button
 						on:click={() =>
 							checkHabit(data, habit)
@@ -140,8 +121,8 @@
 							<Xmark />
 						{/if}
 					</button>
-				</Doc>
-			{/each}
+				{/each}
+			</Doc>
 		</div>
 	{/each}
 </div>

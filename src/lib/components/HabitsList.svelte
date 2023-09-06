@@ -6,11 +6,13 @@
 		Firestore,
 		doc,
 		collection,
-		setDoc,
 		addDoc,
 		deleteDoc,
 		query,
-		orderBy
+		orderBy,
+
+		updateDoc
+
 	} from "firebase/firestore";
 
 	export let user: User;
@@ -23,7 +25,9 @@
 
 	async function handleKeyDown(event: KeyboardEvent, habit: any) {
 		if (event.key === "Enter") {
-			await setDoc(doc(firestore, "tracker", user.uid, "habits", habit.id), { name: habit.name });
+            const docRef = doc(firestore, "tracker", user.uid, "habits", habit.id);
+			await updateDoc(docRef, { name: habit.name });
+            (event.target as HTMLInputElement).blur();
 		}
 	}
 
@@ -40,7 +44,8 @@
 	}
 
 	async function handleDelete(habit: any) {
-		await deleteDoc(doc(firestore, "tracker", user.uid, "habits", habit.id));
+        const docRef = doc(firestore, "tracker", user.uid, "habits", habit.id);
+		await deleteDoc(docRef);
 	}
 
 	const habitsRef = collection(firestore, "tracker", user.uid, "habits");

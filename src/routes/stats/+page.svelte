@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { SignedIn } from "sveltefire";
+	import { SignedIn, Doc } from "sveltefire";
 	import { firestore } from "$lib/firebase";
 	import HabitStats from "$lib/components/HabitStats.svelte";
+	import Pro from "$lib/components/Pro.svelte";
 </script>
 
 <svelte:head>
@@ -14,5 +15,11 @@
 </svelte:head>
 
 <SignedIn let:user>
-	<HabitStats {user} {firestore} />
+	<Doc ref={`pro/${user.uid}`} let:data>
+		{#if data}
+			<HabitStats {user} {firestore} />
+		{:else}
+            <Pro {user} />
+		{/if}
+	</Doc>
 </SignedIn>

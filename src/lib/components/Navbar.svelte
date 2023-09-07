@@ -8,6 +8,14 @@
 	</div>
 	<div class="flex-none gap-2">
 		<div>
+			<a href="/stats" class="btn btn-ghost">
+				<div>
+					<p>PRO</p>
+				</div>
+			</a>
+		</div>
+
+		<div>
 			<a href="/account" class="btn btn-ghost btn-circle avatar">
 				<div class="w-10 rounded-full">
 					<SignedIn let:user>

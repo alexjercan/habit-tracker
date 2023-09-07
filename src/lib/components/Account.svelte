@@ -4,6 +4,7 @@
 	import type { User } from "firebase/auth";
 	import HabitsList from "./HabitsList.svelte";
 	import Pro from "./Pro.svelte";
+	import { Doc } from "sveltefire";
 
 	export let user: User;
 	export let firestore: Firestore;
@@ -15,7 +16,11 @@
 	<div class="flex flex-col justify-center items-center">
 		<p>Logged in as {user.displayName || "Guest"}</p>
 
-		<Pro {user} />
+		<Doc ref={`pro/${user.uid}`} let:data>
+			{#if !data}
+				<Pro {user} />
+			{/if}
+		</Doc>
 
 		<button on:click={firebaseSignOut} class="btn w-full"> SignOut </button>
 	</div>

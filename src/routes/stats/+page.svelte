@@ -3,6 +3,14 @@
 	import { firestore } from "$lib/firebase";
 	import HabitStats from "$lib/components/HabitStats.svelte";
 	import Pro from "$lib/components/Pro.svelte";
+	import { onMount } from "svelte";
+
+	async function popConfetti() {
+		const confetti = (await import("$lib/confetti")).default;
+		confetti();
+	}
+
+	onMount(popConfetti);
 </script>
 
 <svelte:head>
@@ -19,7 +27,7 @@
 		{#if data}
 			<HabitStats {user} {firestore} />
 		{:else}
-            <Pro {user} />
+			<Pro {user} />
 		{/if}
 	</Doc>
 </SignedIn>

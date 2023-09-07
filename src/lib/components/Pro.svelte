@@ -9,7 +9,7 @@
 	<script async src="https://js.stripe.com/v3/buy-button.js">
 	</script>
 
-    <p class="text-xl">Buy Pro to view stats of your progress for $1.99</p>
+	<p class="text-xl">Buy Pro to view stats of your progress for $1.99</p>
 
 	{#if PUBLIC_APPLICATION_MODE === "prod"}
 		<stripe-buy-button

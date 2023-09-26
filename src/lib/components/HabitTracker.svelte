@@ -7,7 +7,7 @@
 		doc,
 		setDoc,
 		query,
-		orderBy
+		orderBy,
 	} from "firebase/firestore";
 	import { formatDate, generateDaysList } from "../date";
 	import Checkmark from "./Checkmark.svelte";
@@ -31,14 +31,20 @@
 	}
 
 	function completeHabit(day: string, data: Daily | null, habit: Habit) {
+        const dateTimestamp = new Date(day);
+
 		setDoc(doc(firestore, `tracker/${user.uid}/daily/${day}`), {
-			done: [...(data?.done ?? []), doc(firestore, `tracker/${user.uid}/habits/${habit.id}`)]
+			done: [...(data?.done ?? []), doc(firestore, `tracker/${user.uid}/habits/${habit.id}`)],
+            createdAt: dateTimestamp
 		});
 	}
 
 	function uncompleteHabit(day: string, data: Daily | null, habit: Habit) {
+        const dateTimestamp = new Date(day);
+
 		setDoc(doc(firestore, `tracker/${user.uid}/daily/${day}`), {
-			done: data?.done?.filter((h) => h.id !== habit.id) ?? []
+			done: data?.done?.filter((h) => h.id !== habit.id) ?? [],
+            createdAt: dateTimestamp
 		});
 	}
 

@@ -1,14 +1,14 @@
 <script lang="ts">
 	import type { User } from "sveltefire";
 	import {
-		doc,
+        query,
 		collection,
-		getDoc,
+		orderBy,
+        limit,
 		getDocs,
 		Firestore,
 		DocumentReference
 	} from "firebase/firestore";
-	import { generateDaysList } from "../date";
 	import { onMount } from "svelte";
 
 	export let user: User;
@@ -24,13 +24,6 @@
 		name: string;
 	};
 
-	function checkHabit(data: Daily | null, habit: Habit): boolean {
-		return data?.done?.map((h) => h.id)?.includes(habit.id) ?? false;
-	}
-
-	const pastDays = generateDaysList(-61, -31);
-	const currDays = generateDaysList(-30, 0);
-
 	onMount(async () => {
 		const Plotly = await import("plotly.js-dist");
 
@@ -40,33 +33,39 @@
 			return { id: doc.id, name: doc.data().name };
 		}) as Habit[];
 
+        const dailyRef = collection(firestore, "tracker", user.uid, "daily");
+        const dailyQuery = query(dailyRef, orderBy("createdAt", "desc"), limit(60));
+        const dailySnap = await getDocs(dailyQuery);
+        const daily = dailySnap.docs.map((doc) => {
+            return { id: doc.id, done: doc.data().done } as Daily;
+        });
+
 		const theta = habits.map((habit) => habit.name);
 		const pastR = Array(habits.length).fill(0);
 		const currR = Array(habits.length).fill(0);
 
-		for (let day of pastDays) {
-			const dailyRef = doc(firestore, "tracker", user.uid, "daily", day);
-			const dailySnap = await getDoc(dailyRef);
-			const daily = dailySnap.data() as Daily;
+        const currDaily = daily.slice(0, 30);
+        const pastDaily = daily.slice(30, 60);
+
+		for (let day of currDaily) {
+            const done = day.done.map((h) => h.id);
 
 			for (let i = 0; i < habits.length; i++) {
-				if (checkHabit(daily, habits[i])) {
-					pastR[i]++;
-				}
-			}
-		}
-
-		for (let day of currDays) {
-			const dailyRef = doc(firestore, "tracker", user.uid, "daily", day);
-			const dailySnap = await getDoc(dailyRef);
-			const daily = dailySnap.data() as Daily;
-
-			for (let i = 0; i < habits.length; i++) {
-				if (checkHabit(daily, habits[i])) {
+				if (done.includes(habits[i].id)) {
 					currR[i]++;
 				}
 			}
 		}
+
+        for (let day of pastDaily) {
+            const done = day.done.map((h) => h.id);
+
+            for (let i = 0; i < habits.length; i++) {
+                if (done.includes(habits[i].id)) {
+                    pastR[i]++;
+                }
+            }
+        }
 
 		Plotly.newPlot(
 			document.getElementById("polar"),

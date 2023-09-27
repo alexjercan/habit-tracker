@@ -13,12 +13,32 @@
 		<Navbar />
 		<main class="flex flex-col w-full h-full items-center justify-center">
 			<slot />
-			<div class="flex flex-col items-center justify-center">
+			<div class="flex flex-col flex-grow items-center justify-around">
 				<SignedOut>
-					<h1 class="text-xl">Login</h1>
-					<GoogleSignin />
-					<AnonymousSignin />
-					<p class="footer">By signing up, you agree to the Terms of Service & Privacy Policy.</p>
+					<div class="flex flex-col items-center justify-center">
+						<h1 class="text-xl">Login</h1>
+						<GoogleSignin />
+						<AnonymousSignin />
+					</div>
+					<div>
+						<p class="text-xl">
+							You should check out this
+							<a href="https://www.youtube.com/watch?v=Oy5THj0IJ8o">
+								<span class="underline">
+									<i> VIDEO </i>
+								</span>
+							</a>
+							to learn how to use this app.
+						</p>
+						<p class="">
+							If you have any questions, feel free to contact me at
+							<a href="mailto:alexjercan19@gmail.com">
+								<span class="underline">
+									<i> alexjercan19@gmail.com </i>
+								</span>
+							</a>
+						</p>
+					</div>
 				</SignedOut>
 			</div>
 		</main>

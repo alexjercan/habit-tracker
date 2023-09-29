@@ -7,13 +7,17 @@
 		<a href="/" class="btn btn-ghost normal-case text-5xl">Habit Tracker</a>
 	</div>
 	<div class="flex-none gap-2">
-		<div>
-			<a href="/stats" class="btn btn-ghost">
+		<SignedIn let:user>
+			{#if !user.isAnonymous }
 				<div>
-					<p>PRO</p>
+					<a href="/stats" class="btn btn-ghost">
+						<div>
+							<p>PRO</p>
+						</div>
+					</a>
 				</div>
-			</a>
-		</div>
+			{/if}
+		</SignedIn>
 
 		<div>
 			<a href="/account" class="btn btn-ghost btn-circle avatar">
